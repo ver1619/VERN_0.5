@@ -41,39 +41,6 @@ In-memory state, on-disk state, and metadata are mutually consistent at all time
 > **Invariant:** All externally observable behavior in v0.5 is derivable solely
 > from persisted WAL and Manifest state.<br>
 
-## SStables in v0.5
-**Role:**
-In v0.5, SSTables define the immutable on-disk data model and the read-path contract for persisted data.<br>
-
-They establish:
-- Immutability of on-disk state
-- Total ordering via the internal key comparator
-- CRC-verified, corruption-aware reads
-- Version-aware merging with in-memory state<br>
-
-SSTables in v0.5 serve as a correctness anchor for future lifecycle operations (flush, compaction), not as an active write target.
-
-**Limitations (Intentional)**:<br>
-In v0.5, SSTables:
-- Are not produced by memtable flush
-- Do not participate in compaction
-- Do not reduce memory usage
-- Do not optimize read performance
-- Do not participate in recovery replay<br>
-
-They are read-only structures used to lock invariants, not to manage data movement.<br>
-
-**Design Intent:**<br>
-The presence of SSTables in v0.5 separates the data model from the data lifecycle.<br>
-v0.5 answers:
-- What does immutable on-disk data look like?
-- How is it ordered?
-- How is it read safely?
-- How does it interact with newer versions?
-
-**Version Scope Note**<br>
-SSTables become an active persistence mechanism only in later versions when memtable flushing and compaction are introduced.
-
 ## Explicit Non-Goals:
 v0.5 intentionally does not provide:
 - Snapshot isolation or read/access semantics
@@ -83,4 +50,40 @@ v0.5 intentionally does not provide:
 - Bloom filters
 - CLI or user-facing tools
 - Performance optimizations or benchmarks<br>
+
 These features will be explored in later versions..
+
+## Tests (v0.5)
+
+Vern_KV v0.5 relies on an extensive test suite to validate core correctness and recovery guarantees.
+Testing is treated as the primary correctness interface.
+
+### Unit Tests<br>
+Unit tests validate individual components in isolation, including:
+- Write-Ahead Log (segmentation, framing, checksums)
+- Manifest and metadata replay
+- InternalKey encoding and comparator ordering
+- Memtable insertion and ordering
+- SSTable read-only format and iterators
+- Internal and merge iterators
+
+---
+
+### Integration & Crash Tests<br>
+Integration tests validate full engine behavior across process boundaries, including:
+- End-to-end write correctness semantics
+- Deterministic crash recovery
+- WAL fsync durability boundaries
+- Prefix-safe WAL truncation
+- Version-aware read correctness
+- Tombstone behavior across layers<br>
+
+Crash tests use real process termination (SIGKILL - abrupt termination) to validate recovery correctness under abrupt failure.<br>
+
+All tests can be run with:
+
+```bash
+go test ./...
+```
+
+> **NOTE**: v0.5 does not include memtable flush or compaction; tests focus exclusively on write correctness, recovery determinism, and internal consistency.
