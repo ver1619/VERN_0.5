@@ -1,0 +1,29 @@
+/bin/
+/dist/
+*.exe
+*.out
+*.test
+
+# Editor / OS junk
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+Thumbs.db
+
+# Logs & temp files
+*.log
+*.tmp
+tmp/
+temp/
+
+# Database runtime data (generated at runtime, NOT source)
+data/
+MANIFEST
+*.sst
+*.wal
+
+# Profiling / coverage
+*.prof
+coverage.out
