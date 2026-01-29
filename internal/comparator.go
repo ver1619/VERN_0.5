@@ -6,7 +6,7 @@ import "bytes"
 type Comparator struct{}
 
 // Compare compares two encoded InternalKeys.
-// Returns:
+// Returns: //
 //
 //	-1 if a < b
 //	 0 if a == b

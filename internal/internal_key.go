@@ -14,11 +14,9 @@ const (
 )
 
 // InternalKey is the byte-level key stored in memtables and SSTables.
-// Layout:
-//
-//	[ user key bytes | 8-byte trailer ]
-//
+// Layout : [ user key bytes | 8-byte trailer ]
 // Trailer (uint64, little-endian):
+// Bit Layout: [ 56 bits | 8 bits ]
 //
 //	high 56 bits : sequence number
 //	low  8 bits  : record type

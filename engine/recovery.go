@@ -18,17 +18,13 @@ type RecoveredState struct {
 
 // Recover performs full crash recovery.
 func Recover(manifestPath string, walDir string) (*RecoveredState, error) {
-	// --------------------------------
-	// Phase 1: Manifest replay
-	// --------------------------------
+	// Manifest replay
 	vs, err := ReplayManifest(manifestPath)
 	if err != nil {
 		return nil, err
 	}
 
-	// --------------------------------
-	// Phase 2: Initialize memtable
-	// --------------------------------
+	// Initialize memtable
 	mt := memtable.New()
 
 	// Determine highest durable sequence number
@@ -42,9 +38,7 @@ func Recover(manifestPath string, walDir string) (*RecoveredState, error) {
 		maxSeq = vs.WALCutoffSeq
 	}
 
-	// --------------------------------
-	// Phase 3: Discover WAL segments
-	// --------------------------------
+	// Discover WAL segments
 	entries, err := os.ReadDir(walDir)
 	if err != nil {
 		return nil, err
@@ -62,9 +56,7 @@ func Recover(manifestPath string, walDir string) (*RecoveredState, error) {
 
 	sort.Strings(segments)
 
-	// --------------------------------
-	// Phase 4: WAL replay
-	// --------------------------------
+	// WAL replay
 	for _, path := range segments {
 		data, err := os.ReadFile(path)
 		if err != nil {
