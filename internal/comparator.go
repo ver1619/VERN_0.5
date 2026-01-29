@@ -6,11 +6,7 @@ import "bytes"
 type Comparator struct{}
 
 // Compare compares two encoded InternalKeys.
-// Returns: //
-//
-//	-1 if a < b
-//	 0 if a == b
-//	+1 if a > b
+// Returns: -1 if a < b, 0 if a == b, +1 if a > b
 func (Comparator) Compare(a, b []byte) int {
 	// 1. Compare user keys
 	ua := ExtractUserKey(a)
