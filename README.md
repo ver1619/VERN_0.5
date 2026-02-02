@@ -93,5 +93,5 @@ go test ./...
 🔗 [High-Level Overview](ARCHITECTURE.md)<br>
 🔗 [Project Scope](ProjectScope.md)<br>
 🔗 [Refer](RefCorner.md)<br>
-🔗 [Test Suite](tests.ms)
+🔗 [Test Suite](tests.md)<br>
 
