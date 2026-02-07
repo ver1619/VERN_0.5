@@ -53,6 +53,10 @@ v0.5 intentionally does not provide:
 
 These features will be explored in later versions..
 
+## Requirements
+**Install**:<br>
+`go 1.23+`
+
 ## Tests (v0.5)
 
 Vern_KV v0.5 relies on an extensive test suite to validate core correctness and recovery guarantees.
